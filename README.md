@@ -1,62 +1,271 @@
-# Avatar Universe: Arquitetura com Design Patterns em Java
+# Avatar Universe: Advanced Architecture with Design Patterns in Java
 
-> Um projeto acadêmico que modela o universo de Avatar utilizando uma arquitetura avançada com Padrões de Projeto para criar um sistema coeso, flexível e de baixo acoplamento.
-
----
-
-## 📜 Sobre o Projeto
-
-Este projeto foi desenvolvido para a disciplina de **Projeto de Software** e tem como principal objetivo aplicar de forma prática um conjunto de Padrões de Projeto (Design Patterns) em um domínio conhecido: o universo de Avatar.
-
-O sistema explora conceitos como espíritos primordiais, a natureza dos elementos e os diferentes estilos de dobra, demonstrando como os padrões **Singleton, Mediator, Strategy, Proxy** e **Static Factory Method** podem ser combinados para construir um software robusto e elegante.
+> An academic project that models the Avatar universe using an advanced architecture with Design Patterns to create a cohesive, flexible, and loosely coupled system.
 
 ---
 
-## 🎨 Diagrama de Classes
+## 📜 About the Project
 
-A arquitetura do projeto foi planejada para ser modular e extensível. O diagrama de classes abaixo ilustra as principais entidades e seus relacionamentos.
+This project was developed for the **Software Engineering** course and aims to practically apply a set of Design Patterns in a well-known domain: the Avatar universe.
 
-![Diagrama de Classes do Projeto Avatar](Avatar.png)
+The system explores concepts such as primordial spirits, the nature of elements, and different bending styles, demonstrating how the **Singleton, Mediator, Strategy, Proxy**, and **Static Factory Method** patterns can be combined to build robust and elegant software.
+
+### 🎯 Key Features
+
+- **Object-Oriented Modeling** of the Avatar universe including humans, animals, spirits, and nations
+- **Element Bending System** with support for Water, Earth, Fire, and Air bending
+- **Avatar State Management** with reincarnation cycle tracking
+- **Spiritual Entities** including Raava, Vaatu, and the Moon Spirit
+- **Event System** for modeling significant occurrences in the Avatar world
+- **Political Structures** and geographical locations
 
 ---
 
-## 🧠 Padrões de Projeto (Design Patterns) Aplicados
+## 🚀 Getting Started
 
-A espinha dorsal deste projeto é o uso combinado de múltiplos Padrões de Projeto para gerenciar estado, comportamento e acesso a recursos.
+### Prerequisites
 
-### 1. Singleton (Padrão de Criação)
+- Java 17 or higher
+- Maven 3.6+
 
-* **Propósito:** Garantir que uma classe tenha apenas uma instância e fornecer um ponto de acesso global a ela.
-* **Aplicação no Projeto:** Diversas entidades no universo de Avatar são, por natureza, únicas. O padrão Singleton foi usado para modelar essa característica:
-    * **Espíritos e Entidades Cósmicas:** As classes `Raava`, `Vaatu`, `MoonSpirit` e `SozinComet` são Singletons, pois representam entidades únicas e indivisíveis na lore do universo.
-    * **Elementos Fundamentais:** As classes `Air`, `Water`, `Fire` e `Earth` também são Singletons. Isso representa a ideia de que o "elemento" em si é um conceito único e compartilhado, ao qual os dobradores se conectam.
-    * **Mediador:** A classe `RaavaAndVaatuMediator`, por mediar a interação entre dois Singletons, também é um Singleton para garantir um único ponto de controle para essa comunicação.
+### Building the Project
 
-### 2. Mediator (Padrão Comportamental)
+```bash
+# Clone the repository
+git clone https://github.com/lipe-pedras/avatar-universe.git
+cd avatar-universe
 
-* **Propósito:** Reduzir o acoplamento entre um conjunto de objetos, encapsulando a forma como eles interagem através de um objeto mediador central.
-* **Aplicação no Projeto:** A relação entre `Raava` e `Vaatu` é inerentemente complexa.
-    * A classe **`RaavaAndVaatuMediator`** atua como o mediador, centralizando a lógica de interação entre eles. Dessa forma, `Raava` e `Vaatu` não precisam se conhecer diretamente, o que os desacopla e simplifica a manutenção.
+# Compile the project
+mvn clean compile
 
-### 3. Strategy (Padrão Comportamental)
+# Run the application
+mvn exec:java -Dexec.mainClass="br.edu.unifei.ecot12.App"
+```
 
-* **Propósito:** Definir uma família de algoritmos, encapsular cada um deles e torná-los intercambiáveis.
-* **Aplicação no Projeto:** A "dobra" de um elemento é tratada como um algoritmo (uma estratégia).
-    * A classe `Physical` (contexto) contém uma referência a uma estratégia de dobra. As diferentes dobras (`WaterBending`, `FireBending`, etc.) são as "Estratégias Concretas".
-    * Isso permite que um personagem execute sua dobra sem precisar de condicionais, simplesmente delegando a ação para o seu objeto de estratégia.
+---
 
-### 4. Proxy (Padrão Estrutural)
+## 🎨 Class Diagram
 
-* **Propósito:** Fornecer um substituto ou um espaço reservado para outro objeto, a fim de controlar o acesso a ele.
-* **Aplicação no Projeto:** O Proxy gerencia a relação entre um Dobrador (cliente) e o Elemento Singleton (serviço/recurso).
-    * Em vez de o Dobrador acessar o Elemento diretamente, ele o faz através de um Proxy.
-    * Este Proxy pode controlar o acesso, gerenciar uma conexão ou simplesmente abstrair a complexidade do objeto Elemento real. Ele atua como um "embaixador" do Elemento para o Dobrador.
+The project architecture was designed to be modular and extensible. The class diagram below illustrates the main entities and their relationships.
 
-### 5. Static Factory Method (Padrão de Criação Simples)
+![Avatar Project Class Diagram](Avatar.png)
 
-* **Propósito:** Utilizar um método estático para encapsular a lógica de criação de um objeto, oferecendo uma alternativa mais flexível e descritiva a um construtor público.
-* **Aplicação no Projeto:** O método **`Avatar.createAvatar()`** é um exemplo clássico deste padrão. Em vez de expor um construtor (`new Avatar()`), a classe `Avatar` centraliza a criação em um único ponto, permitindo a implementação de regras de negócio complexas:
-    1.  **Controle de instâncias:** A lógica interna do método garante que apenas uma instância represente o Avatar "vivo" atualmente, retornando o Avatar atual, caso este ainda esteja vivo, e um novo tente ser criado.
-    2.  **Gerenciamento do Ciclo de Vida:** Ao restringir e controlar as instâncias de Avatar, é possível garantir o funcionamento da pilha pastAvatars, que contém todos os Avatares instânciados no código, representando a conexão que os eles tinha entre si.
-* **Vantagens:** Isso torna o código mais expressivo (`Avatar.createAvatar()` vs. `new Avatar()`), centraliza regras críticas de negócio e abstrai a complexidade do processo de criação para o cliente.
+---
+
+## 🧠 Design Patterns Applied
+
+The backbone of this project is the combined use of multiple Design Patterns to manage state, behavior, and resource access.
+
+### 1. Singleton (Creational Pattern)
+
+**Purpose:** Ensure a class has only one instance and provide a global point of access to it.
+
+**Application in the Project:** Several entities in the Avatar universe are inherently unique. The Singleton pattern was used to model this characteristic:
+
+- **Spirits and Cosmic Entities:** The `Raava`, `Vaatu`, `MoonSpirit`, and `SozinComet` classes are Singletons, as they represent unique and indivisible entities in the universe's lore.
+- **Fundamental Elements (Memory Optimization):** The `Air`, `Water`, `Fire`, and `Earth` classes are implemented as Singletons primarily for **memory economy**. Since all their attributes and methods are static, there's no reason to create multiple instances. Also, each element represents a shared, immutable concept in the universe - the element itself doesn't change, only how benders interact with it. Using Singleton ensures efficient memory usage while maintaining the semantic correctness of having only one instance of each fundamental element.
+- **Mediator:** The `RaavaAndVaatuMediator` class, mediating the interaction between two Singletons, is also a Singleton to ensure a single control point for this communication.
+
+**Benefits:**
+- **Memory efficiency** - Prevents unnecessary object instantiation for static entities
+- **Conceptual accuracy** - Models the unique nature of fundamental elements
+- **Global access** - Provides a consistent way to access these shared resources
+
+**Example:**
+```java
+Raava raava = Raava.getInstance();
+Vaatu vaatu = Vaatu.getInstance();
+```
+
+### 2. Mediator (Behavioral Pattern)
+
+**Purpose:** Reduce coupling between a set of objects by encapsulating how they interact through a central mediator object.
+
+**Application in the Project:** In the Avatar universe, `Raava` and `Vaatu` represent the primordial forces of **good and evil**, light and darkness. Their powers are intrinsically **coupled** - when Vaatu's power increases, Raava's decreases proportionally, and vice versa. This represents the eternal balance between order and chaos.
+
+- The **`RaavaAndVaatuMediator`** class acts as the mediator, managing this inverse relationship between the two spirits. Instead of `Raava` and `Vaatu` directly modifying each other's strength (which would create tight coupling), the mediator centralizes this balancing logic.
+- When one spirit's power changes, the mediator automatically adjusts the other's power to maintain the cosmic balance, ensuring that their combined power represents the total spiritual energy in the universe.
+
+**Benefits:**
+- **Decouples** Raava and Vaatu - they don't need direct references to each other
+- **Centralizes** the power balance algorithm in one place
+- **Simplifies maintenance** - changes to the balance logic only affect the mediator
+
+**Example:**
+```java
+Raava raava = Raava.getInstance();
+Vaatu vaatu = Vaatu.getInstance();
+RaavaAndVaatuMediator mediator = RaavaAndVaatuMediator.getInstance();
+
+raava.setStrength(70); // Mediator automatically sets Vaatu's strength to 30
+System.out.println(vaatu.getStrength()); // Outputs: 30
+```
+
+### 3. Strategy (Behavioral Pattern)
+
+**Purpose:** Define a family of algorithms, encapsulate each one, and make them interchangeable.
+
+**Application in the Project:** The world of Avatar has many types of physical beings - **Humans, Avatars, Animals** - and each has a **different algorithm for bending**. Even within the same element, the bending technique varies:
+
+- A **Human** waterbender uses waterbending differently than an **Animal** waterbender
+- An **Avatar** can bend all four elements
+
+The Strategy pattern solves this elegantly:
+
+- The `Physical` class (context) contains a reference to a bending strategy (`BendInterface`)
+- Concrete strategies exist for each combination:
+  - `WaterHumanBending`, `WaterAnimalBending`
+  - `FireHumanBending`, `FireAnimalBending`
+  - `AirHumanBending`, `AirAnimalBending`
+  - `EarthHumanBending`, `EarthAnimalBending`
+  - `AvatarBending`, `AvatarBending`
+- When a being calls `bend()`, it delegates to its specific strategy, which executes the appropriate algorithm for that being type
+
+**Advantages:**
+- **Encapsulates behavior variation** - each being type has its own implementation
+- **Easy to extend** - adding new being types or bending styles is simple
+- **Runtime flexibility** - bending behavior can be changed dynamically
+
+**Example:**
+```java
+// Human waterbender
+Human katara = new Human();
+katara.setBending(new WaterHumanBending());
+katara.bend(); // Executes human waterbending algorithm
+
+// Animal waterbender - different algorithm, same element
+Animal<Water> unagi = new Animal<>(Water.getInstance());
+unagi.setBending(new WaterAnimalBending());
+unagi.bend(); // Executes animal waterbending algorithm
+
+// Avatar - can bend all elements
+Avatar aang = Avatar.createAvatar();
+aang.setBending(new AvatarBending(aang));
+aang.bend(); // Executes avatar-specific omnibending algorithm
+```
+
+### 4. Proxy (Structural Pattern)
+
+**Purpose:** Provide a surrogate or placeholder for another object to control access to it.
+
+**Application in the Project:** The Proxy manages the relationship between a Bender (client) and the Element Singleton (service/resource).
+
+- Instead of the Bender accessing the Element directly, they do so through a Proxy.
+- This Proxy can control access, manage a connection, or simply abstract the complexity of the real Element object. It acts as an "ambassador" of the Element to the Bender.
+
+**Benefits:**
+- Controls access to singleton Element instances
+- Adds an abstraction layer between benders and elements
+- Can implement lazy initialization and access control
+
+### 5. Static Factory Method (Creational Pattern)
+
+**Purpose:** Use a static method to encapsulate object creation logic, offering a more flexible and descriptive alternative to a public constructor.
+
+**Application in the Project:** The **`Avatar.createAvatar()`** method is a classic example of this pattern. Instead of exposing a constructor (`new Avatar()`), the `Avatar` class centralizes creation in a single point, allowing the implementation of complex business rules:
+
+1. **Instance Control:** The method's internal logic ensures that only one instance represents the currently "alive" Avatar, returning the current Avatar if still alive when a new one attempts to be created.
+2. **Lifecycle Management:** By restricting and controlling Avatar instances, it's possible to ensure the functioning of the `pastAvatars` stack, which contains all Avatars instantiated in the code, representing the connection they had with each other.
+
+**Advantages:**
+- Makes code more expressive (`Avatar.createAvatar()` vs. `new Avatar()`)
+- Centralizes critical business rules
+- Abstracts the complexity of the creation process from the client
+- Implements the Avatar reincarnation cycle
+
+**Example:**
+```java
+Avatar aang = Avatar.createAvatar();
+aang.setName("Aang");
+aang.setAlive(false);
+
+Avatar korra = Avatar.createAvatar(); // Returns a new Avatar instance
+```
+
+---
+
+## 📦 Project Structure
+
+```
+avatar-universe/
+├── src/main/java/br/edu/unifei/ecot12/
+│   ├── App.java                      # Main application entry point
+│   ├── Avatar.java                   # Avatar class with Static Factory Method
+│   ├── Human.java                    # Human beings class
+│   ├── Animal.java                   # Animal class
+│   ├── Spirit.java                   # Spirit class
+│   ├── Element.java                  # Abstract Element class
+│   ├── Air.java                      # Air Element Singleton
+│   ├── Water.java                    # Water Element Singleton
+│   ├── Fire.java                     # Fire Element Singleton
+│   ├── Earth.java                    # Earth Element Singleton
+│   ├── BendInterface.java            # Bending Strategy interface
+│   ├── *Bending.java                 # Concrete bending strategies
+│   ├── Raava.java                    # Raava Spirit Singleton
+│   ├── Vaatu.java                    # Vaatu Spirit Singleton
+│   ├── RaavaAndVaatuMediator.java    # Mediator between Raava and Vaatu
+│   ├── Nation.java                   # Nation class
+│   ├── Locality.java                 # Geographic location class
+│   └── Event.java                    # Event class
+├── pom.xml                            # Maven configuration
+└── README.md                          # This file
+```
+
+---
+
+## 🌟 Example Usage
+
+The `App.java` file demonstrates the system in action, recreating iconic scenes from the Avatar series:
+
+```java
+// Create characters
+Avatar aang = Avatar.createAvatar();
+aang.setName("Aang");
+aang.setBending(new AvatarBending(aang));
+
+Human katara = new Human();
+katara.setName("Katara");
+katara.setBending(new WaterHumanBending());
+
+// Execute bending
+aang.bend();
+katara.bend();
+
+// Demonstrate Avatar reincarnation cycle
+aang.setAlive(false);
+Avatar korra = Avatar.createAvatar(); // Returns new Avatar instance
+```
+
+---
+
+## 🎓 Educational Value
+
+This project demonstrates:
+
+- **Practical application of Design Patterns** in a cohesive system
+- **Object-Oriented Design principles** (SOLID, DRY, KISS)
+- **Separation of concerns** through proper use of patterns
+- **Low coupling and high cohesion** in software architecture
+- **Domain modeling** of a complex fictional universe
+
+---
+
+## 📝 License
+
+This project is licensed under the terms specified in the LICENSE file.
+
+---
+
+## 👨‍💻 Author
+
+**lipe-pedras**
+- GitHub: [@lipe-pedras](https://github.com/lipe-pedras)
+
+---
+
+## 🙏 Acknowledgments
+
+- Developed as part of the Software Engineering course at UNIFEI (Universidade Federal de Itajubá)
+- Inspired by the Avatar: The Last Airbender and The Legend of Korra series
+- Built to demonstrate the practical application of Design Patterns in Java
 
